@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class Game implements Equatable {
+class Game extends Equatable {
   final int id;
   final String name;
 
@@ -11,10 +11,6 @@ class Game implements Equatable {
 
   @override
   List<Object> get props => [id, name];
-
-  @override
-  // TODO: implement stringify
-  bool get stringify => throw UnimplementedError();
 
   static Game fromJson(dynamic json) {
     return Game(

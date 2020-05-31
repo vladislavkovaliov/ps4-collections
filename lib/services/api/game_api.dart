@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' show Client;
+import 'package:http/http.dart' as http;
 import 'package:ps4_collection/models/models.dart';
 import 'package:meta/meta.dart';
 
@@ -8,19 +8,18 @@ import 'package:meta/meta.dart';
 class GameApi {
   final String _baseUrl = "https://api-v3.igdb.com/games";
   final String apiKey;
-
-  Client client = Client();
+  final http.Client httpClient;
 
   GameApi({
-    @required this.apiKey
+    @required this.apiKey,
+    @required this.httpClient,
   });
 
   Future<List<Game>> fetchGames() async {
-    var response = await client.post(
+    var response = await httpClient.post(
       this._baseUrl,
       headers: {
         "user-key": this.apiKey,
-        "Content-Type": "application/json"
       },
       body: "fields name;",
     );

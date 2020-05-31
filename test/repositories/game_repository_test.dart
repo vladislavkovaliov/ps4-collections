@@ -19,7 +19,7 @@ void main() {
 
         gameRepository.fetchGames();
 
-        verify(gameApi.fetchGames());
+        verify(gameApi.fetchGames()).called(1);
       });
     });
   });
