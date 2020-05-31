@@ -5,7 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:ps4_collection/models/models.dart';
 import 'package:ps4_collection/services/api/game_api.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/testing.dart';
 
 class MockGameApi extends Mock implements GameApi {
   GameApi _real;
@@ -29,12 +28,12 @@ void main() {
 
   setUp(() {
     gameApi = GameApi(
+      httpClient: http.Client(),
       apiKey: "api_key",
     );
   });
 
   group("[game_api.dart]", () {
-
     group("fetchGames()", () {
       test("should return array of games:skip", () async {
         var res = await gameApi.fetchGames();
@@ -59,13 +58,9 @@ void main() {
             headers: headers,
             body: "fields name;",
           ))
-          .thenAnswer(
-              (_) async {
-                return Future.value(http.Response(mockGameString, 200));
-              });
+          .thenAnswer((_) async => Future.value(http.Response(mockGameString, 200)));
 
         expect(await mockGameApi.fetchGames(), mockGame);
-
       });
     });
   });

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:ps4_collection/widgets/buttons/button.dart';
-import 'package:ps4_collection/widgets/forgot_password_and_redirect/forgot_password_and_redirect.dart';
 
 class SignUp extends StatelessWidget {
   @override
@@ -24,11 +23,6 @@ class SignUp extends StatelessWidget {
                 onRedirectTap: () {
                   Navigator.pushNamed(context, '/signIn');
                 },
-              ),
-              ForgotPasswordAndRedirect(
-                  onRedirectTap: () {
-                    Navigator.pushNamed(context, '/signIn');
-                  }
               ),
             ],
           ),

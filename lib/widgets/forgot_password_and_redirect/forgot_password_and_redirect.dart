@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class ForgotPasswordAndRedirect extends StatelessWidget {
   final Function onRedirectTap;
+  final String text;
 
   const ForgotPasswordAndRedirect({
     Key key,
     @required this.onRedirectTap,
+    @required this.text,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class ForgotPasswordAndRedirect extends StatelessWidget {
         GestureDetector(
           onTap: this.onRedirectTap,
           child: Text(
-            "Sign Up",
+            this.text,
             style: TextStyle(color: Color(0xFFFEFEFE)),
           ),
         ),

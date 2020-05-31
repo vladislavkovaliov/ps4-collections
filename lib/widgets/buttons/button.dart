@@ -14,6 +14,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return ButtonTheme(
       height: 50,
+      disabledColor: Color(0xFF8F8F8F),
       child: RaisedButton(
         color: Color(0xFF659069),
         textColor: Color(0xFFFEFEFE),
