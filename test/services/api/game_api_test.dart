@@ -6,6 +6,8 @@ import 'package:ps4_collection/models/models.dart';
 import 'package:ps4_collection/services/api/game_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+final name = "game_name";
+
 class MockGameApi extends Mock implements GameApi {
   GameApi _real;
 
@@ -18,6 +20,10 @@ class MockGameApi extends Mock implements GameApi {
     when(fetchGames()).thenAnswer((_) {
       return _real.fetchGames();
     });
+
+    when(searchGameByName(name)).thenAnswer((_) {
+      return _real.searchGameByName(name);
+    });
   }
 }
 
@@ -25,12 +31,18 @@ class MockHttpClient extends Mock implements http.Client {}
 
 void main() {
   GameApi gameApi;
+  final mockHttpClient = MockHttpClient();
+  final mockGameApi = MockGameApi(mockHttpClient);
+  final headers = {
+    "user-key": "api_key",
+  };
 
   setUp(() {
     gameApi = GameApi(
       httpClient: http.Client(),
       apiKey: "api_key",
     );
+
   });
 
   group("[game_api.dart]", () {
@@ -41,16 +53,11 @@ void main() {
       }, skip: true);
 
       test("should return array of games", () async {
-        final mockHttpClient = MockHttpClient();
-        final mockGameApi = MockGameApi(mockHttpClient);
         final mockGameString = '''
           [{"id": 123, "name": "abc"}]
         ''';
         final json = jsonDecode(mockGameString);
         final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();
-        final headers = {
-          "user-key": "api_key",
-        };
 
         when(mockHttpClient
           .post(
@@ -61,6 +68,28 @@ void main() {
           .thenAnswer((_) async => Future.value(http.Response(mockGameString, 200)));
 
         expect(await mockGameApi.fetchGames(), mockGame);
+      });
+    });
+
+    group("searchGameByName()", () {
+      test("should return array of games", () async {
+        final mockGameString = '''
+          [{"id": 123, "name": "abc"}]
+        ''';
+        final json = jsonDecode(mockGameString);
+        final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();
+        final body = "fields name;\n" +
+                     'search "$name";';
+
+        when(mockHttpClient
+            .post(
+            "https://api-v3.igdb.com/games",
+            headers: headers,
+            body: body,
+          ))
+          .thenAnswer((_) async => Future.value(http.Response(mockGameString, 200)));
+
+        expect(await mockGameApi.searchGameByName(name), mockGame);
       });
     });
   });

@@ -59,6 +59,22 @@ class _SignInFormState extends State<SignInForm> {
     _passwordController.addListener(_onPasswordChanged);
   }
 
+  getInputDecoration(String hintText) {
+    return InputDecoration(
+      contentPadding: EdgeInsets.all(12),
+      labelStyle: TextStyle(color: Color(0xFFFEFEFE)),
+      hintText: hintText,
+      fillColor: Color(0xFF353A47),
+      hintStyle: TextStyle(color: Color(0xFFFEFEFE)),
+      filled: true,
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius:
+        const BorderRadius.all(Radius.circular(30)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -69,11 +85,6 @@ class _SignInFormState extends State<SignInForm> {
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          print(isLoginButtonEnabled(state));
-          print(_emailController.text);
-          print(_passwordController.text);
-          print(state);
-
           return SafeArea(
             child: Form(
               child: Container(
@@ -88,18 +99,7 @@ class _SignInFormState extends State<SignInForm> {
                       style: TextStyle(color: Color(0xFFFEFEFE)),
                       autovalidate: true,
                       autocorrect: false,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(12),
-                          labelStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          hintText: "Email address",
-                          fillColor: Color(0xFF353A47),
-                          hintStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(30)),
-                          )),
+                      decoration: this.getInputDecoration("Email address"),
                       validator: (_) {
                         return !state.isEmailValid ? 'Invalid Email' : null;
                       },
@@ -113,18 +113,7 @@ class _SignInFormState extends State<SignInForm> {
                       autovalidate: true,
                       autocorrect: false,
                       style: TextStyle(color: Color(0xFFFEFEFE)),
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(12),
-                          labelStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          hintText: "Password",
-                          fillColor: Color(0xFF353A47),
-                          hintStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: const BorderRadius.all(Radius.circular(30)),
-                          )
-                      ),
+                      decoration: this.getInputDecoration("Password"),
                       validator: (_) {
                         return !state.isPasswordValid ? 'Invalid Password' : null;
                       },

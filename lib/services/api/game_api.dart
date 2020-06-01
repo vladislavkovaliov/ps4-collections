@@ -32,4 +32,24 @@ class GameApi {
 
     return (json as List).map((x) => Game.fromJson(x)).toList();
   }
+
+
+  Future<List<Game>> searchGameByName(String name) async {
+    var response = await httpClient.post(
+      this._baseUrl,
+      headers: {
+        "user-key": this.apiKey,
+      },
+      body: "fields name;\n" +
+            'search "$name";',
+    );
+
+    if (response.statusCode != 200) {
+      throw new Exception();
+    }
+
+    final json = jsonDecode(response.body);
+
+    return (json as List).map((x) => Game.fromJson(x)).toList();
+  }
 }

@@ -22,6 +22,15 @@ void main() {
         verify(gameApi.fetchGames()).called(1);
       });
     });
-  });
 
+    group("searchGameByName()", () {
+      test("should return array of games by name", () async {
+        var gameRepository = GameRepository(gameApi: gameApi);
+
+        gameRepository.searchGameByName("God of War");
+
+        verify(gameApi.searchGameByName("God of War")).called(1);
+      });
+    });
+  });
 }

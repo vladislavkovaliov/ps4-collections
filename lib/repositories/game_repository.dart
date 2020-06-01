@@ -12,4 +12,8 @@ class GameRepository {
   Future<List<Game>> fetchGames() async {
     return this.gameApi.fetchGames();
   }
+
+  Future<List<Game>> searchGameByName(String name) async {
+    return this.gameApi.searchGameByName(name);
+  }
 }
