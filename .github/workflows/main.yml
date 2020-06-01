@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [macos-latest]
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1
@@ -26,6 +26,12 @@ jobs:
       - run: flutter --version
       - run: flutter pub get
       - run: flutter test --coverage
+      - name: Coveralls Parallel
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          flag-name: run-${{ matrix.test_number }}
+          parallel: true
   coverage:
     needs: test
     runs-on: macos-latest
@@ -34,7 +40,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel: true
+          parallel-finished: true
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
