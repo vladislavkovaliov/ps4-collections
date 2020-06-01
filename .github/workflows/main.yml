@@ -25,13 +25,15 @@ jobs:
       - run: dart --version
       - run: flutter --version
       - run: flutter pub get
-      - name: Test ${{ matrix.test_number }}
-        run: flutter test --coverage
+      - run: flutter test
+  coverage:
+    needs: test
+    runs-on: macos-latest
+    steps:
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: run-${{ matrix.os }}
           parallel: true
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
