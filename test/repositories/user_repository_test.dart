@@ -22,10 +22,6 @@ class MockGoogleSignInAuthentication extends Mock
 
 class MockGoogleSignInAccount extends Mock implements GoogleSignInAccount {}
 
-class MockGoogleAuthProvider extends Mock implements GoogleAuthProvider {
-  static getCredential() {}
-}
-
 class MockAuthCredential extends Mock implements AuthCredential {}
 
 class MockFirebaseUser extends Mock implements FirebaseUser {
@@ -137,6 +133,21 @@ void main() {
         expect(isSignedIn, true);
 
         verify(firebaseAuth.currentUser()).called(1);
+      });
+    });
+
+    group("signOut", () {
+      test("should call both signOut()", () async {
+        when(firebaseAuth.signOut())
+            .thenAnswer((_) => Future<void>.value());
+
+        when(googleSignIn.signOut())
+            .thenAnswer((_) => Future<GoogleSignInAccount>.value());
+
+        await userRepository.signOut();
+
+        verify(firebaseAuth.signOut()).called(1);
+        verify(googleSignIn.signOut()).called(1);
       });
     });
   });

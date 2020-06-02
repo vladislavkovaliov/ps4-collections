@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:ps4_collection/models/models.dart';
-import 'package:ps4_collection/services/api/game_api.dart';
+import 'package:ps4_collection/services/api/api.dart';
 
 class GameRepository {
   final GameApi gameApi;

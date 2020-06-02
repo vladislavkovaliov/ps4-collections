@@ -1,7 +1,7 @@
-import 'package:ps4_collection/repositories/game_repository.dart';
+import 'package:ps4_collection/repositories/repositories.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ps4_collection/services/api/game_api.dart';
+import 'package:ps4_collection/services/api/api.dart';
 
 class MockGameApi extends Mock implements GameApi {}
 
