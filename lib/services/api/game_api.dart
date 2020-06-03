@@ -21,9 +21,9 @@ class GameApi {
       headers: {
         "user-key": this.apiKey,
       },
-      body: "fields name;",
+      body: "fields name,genres;",
     );
-
+    
     if (response.statusCode != 200) {
       throw new Exception();
     }
@@ -40,7 +40,7 @@ class GameApi {
       headers: {
         "user-key": this.apiKey,
       },
-      body: "fields name;\n" +
+      body: "fields name,genres;\n" +
             'search "$name";',
     );
 
