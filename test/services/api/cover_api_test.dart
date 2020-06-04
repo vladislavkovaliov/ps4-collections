@@ -8,47 +8,26 @@ import 'package:flutter_test/flutter_test.dart';
 
 final name = "game_name";
 
-class MockCoverApi extends Mock implements CoverApi {
-  CoverApi _real;
-
-  MockCoverApi(http.Client httpClient) {
-    _real = CoverApi(
-        apiKey: "api_key",
-        httpClient: httpClient
-    );
-
-    when(fetchCovers()).thenAnswer((_) {
-      return _real.fetchCovers();
-    });
-  }
-}
-
 class MockHttpClient extends Mock implements http.Client {}
 
 void main() {
   CoverApi coverApi;
 
+  final API_KEY = "apikey";
   final mockHttpClient = MockHttpClient();
-  final mockCoverApi = MockCoverApi(mockHttpClient);
   final headers = {
-    "user-key": "api_key",
+    "user-key": API_KEY,
   };
 
   setUp(() {
     coverApi = CoverApi(
-      httpClient: http.Client(),
-      apiKey: "api_key",
+      httpClient: mockHttpClient,
+      apiKey: API_KEY,
     );
-
   });
 
   group("[cover_api.dart]", () {
     group("fetchCovers()", () {
-      test("should return array of covers:skip", () async {
-        var res = await coverApi.fetchCovers();
-        print(res);
-      }, skip: true);
-
       test("should return array of games", () async {
         final mockCoverString = '''
           [{"url": "abc"}]
@@ -56,15 +35,34 @@ void main() {
         final json = jsonDecode(mockCoverString);
         final mockCover = (json as List).map((x) => Cover.fromJson(x)).toList();
 
-        when(mockHttpClient
-            .post(
+        when(mockHttpClient.post(
           "https://api-v3.igdb.com/covers",
           headers: headers,
-          body: "fields url;",
-        ))
-          .thenAnswer((_) async => Future.value(http.Response(mockCoverString, 200)));
+          body: "fields url,game;",
+        )).thenAnswer(
+            (_) async => Future.value(http.Response(mockCoverString, 200)));
 
-        expect(await mockCoverApi.fetchCovers(), mockCover);
+        expect(await coverApi.fetchCovers(), mockCover);
+      });
+    });
+
+    group("searchById()", () {
+      test("should return array of cover instance by cover id", () async {
+        final mockCoverString = '''
+          [{ "id": 94113, "game": 75235, "url": "//images.igdb.com/igdb/image/upload/t_thumb/co20m9.jpg" }]
+        ''';
+        final json = jsonDecode(mockCoverString);
+        final mockCover = (json as List).map((x) => Cover.fromJson(x)).toList();
+
+        var cover = 94113;
+        when(mockHttpClient.post(
+          "https://api-v3.igdb.com/covers",
+          headers: headers,
+          body: "fields url,game;\n" + "where id = $cover;",
+        )).thenAnswer(
+            (_) async => Future.value(http.Response(mockCoverString, 200)));
+
+        expect(await coverApi.searchById(cover), mockCover);
       });
     });
   });

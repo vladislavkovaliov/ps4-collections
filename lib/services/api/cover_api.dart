@@ -20,7 +20,26 @@ class CoverApi {
       headers: {
         "user-key": this.apiKey,
       },
-      body: "fields url;",
+      body: "fields url,game;",
+    );
+
+    if (response.statusCode != 200) {
+      throw new Exception();
+    }
+
+    final json = jsonDecode(response.body);
+
+    return (json as List).map((x) => Cover.fromJson(x)).toList();
+  }
+
+  Future<List<Cover>> searchById(int cover) async {
+    var response = await httpClient.post(
+      this._baseUrl,
+      headers: {
+        "user-key": this.apiKey,
+      },
+      body: "fields url,game;\n" +
+            "where id = $cover;",
     );
 
     if (response.statusCode != 200) {

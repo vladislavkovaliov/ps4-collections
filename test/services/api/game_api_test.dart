@@ -8,46 +8,26 @@ import 'package:flutter_test/flutter_test.dart';
 
 final name = "game_name";
 
-class MockGameApi extends Mock implements GameApi {
-  GameApi _real;
-
-  MockGameApi(http.Client httpClient) {
-    _real = GameApi(
-      apiKey: "api_key",
-      httpClient: httpClient
-    );
-
-    when(fetchGames()).thenAnswer((_) {
-      return _real.fetchGames();
-    });
-
-    when(searchGameByName(name)).thenAnswer((_) {
-      return _real.searchGameByName(name);
-    });
-  }
-}
-
 class MockHttpClient extends Mock implements http.Client {}
 
 void main() {
+  final API_KEY = "apikey";
   final mockHttpClient = MockHttpClient();
-  final mockGameApi = MockGameApi(mockHttpClient);
   final headers = {
-    "user-key": "api_key",
+    "user-key": API_KEY,
   };
+
+  GameApi gameApi;
+
+  setUp(() {
+    gameApi = GameApi(
+      httpClient: mockHttpClient,
+      apiKey: API_KEY,
+    );
+  });
 
   group("[game_api.dart]", () {
     group("fetchGames()", () {
-      test("should return array of games:skip", () async {
-        var realGameApi = GameApi(
-          httpClient: http.Client(),
-          apiKey: ""
-        );
-        var res = await realGameApi.fetchGames();
-
-        print(res);
-      }, skip: true);
-
       test("should return array of games", () async {
         final mockGameString = '''
           [{"id": 123, "name": "abc", "genres": []}]
@@ -55,15 +35,14 @@ void main() {
         final json = jsonDecode(mockGameString);
         final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();
 
-        when(mockHttpClient
-          .post(
-            "https://api-v3.igdb.com/games",
-            headers: headers,
-            body: "fields name,genres;",
-          ))
-          .thenAnswer((_) async => Future.value(http.Response(mockGameString, 200)));
+        when(mockHttpClient.post(
+          "https://api-v3.igdb.com/games",
+          headers: headers,
+          body: "fields name,genres,cover;",
+        )).thenAnswer(
+            (_) async => Future.value(http.Response(mockGameString, 200)));
 
-        expect(await mockGameApi.fetchGames(), mockGame);
+        expect(await gameApi.fetchGames(), mockGame);
       });
     });
 
@@ -74,18 +53,16 @@ void main() {
         ''';
         final json = jsonDecode(mockGameString);
         final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();
-        final body = "fields name,genres;\n" +
-                     'search "$name";';
+        final body = "fields name,genres,cover;\n" + 'search "$name";';
 
-        when(mockHttpClient
-            .post(
-            "https://api-v3.igdb.com/games",
-            headers: headers,
-            body: body,
-          ))
-          .thenAnswer((_) async => Future.value(http.Response(mockGameString, 200)));
+        when(mockHttpClient.post(
+          "https://api-v3.igdb.com/games",
+          headers: headers,
+          body: body,
+        )).thenAnswer(
+            (_) async => Future.value(http.Response(mockGameString, 200)));
 
-        expect(await mockGameApi.searchGameByName(name), mockGame);
+        expect(await gameApi.searchGameByName(name), mockGame);
       });
 
       test("should return array of games without genres", () async {
@@ -94,18 +71,16 @@ void main() {
         ''';
         final json = jsonDecode(mockGameString);
         final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();
-        final body = "fields name,genres;\n" +
-            'search "$name";';
+        final body = "fields name,genres;\n" + 'search "$name";';
 
-        when(mockHttpClient
-            .post(
+        when(mockHttpClient.post(
           "https://api-v3.igdb.com/games",
           headers: headers,
           body: body,
-        ))
-            .thenAnswer((_) async => Future.value(http.Response(mockGameString, 200)));
+        )).thenAnswer(
+            (_) async => Future.value(http.Response(mockGameString, 200)));
 
-        expect(await mockGameApi.searchGameByName(name), mockGame);
+        expect(await gameApi.searchGameByName(name), mockGame);
       });
     });
   });

@@ -21,7 +21,7 @@ class GameApi {
       headers: {
         "user-key": this.apiKey,
       },
-      body: "fields name,genres;",
+      body: "fields name,genres,cover;",
     );
     
     if (response.statusCode != 200) {
@@ -40,7 +40,7 @@ class GameApi {
       headers: {
         "user-key": this.apiKey,
       },
-      body: "fields name,genres;\n" +
+      body: "fields name,genres,cover;\n" +
             'search "$name";',
     );
 

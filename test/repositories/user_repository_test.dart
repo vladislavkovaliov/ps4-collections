@@ -55,16 +55,14 @@ void main() {
         var authCred = MockAuthCredential();
         var currentUser = new MockFirebaseUser(email: "user_email");
 
-
         when(googleSignIn.signIn())
             .thenAnswer((_) => Future<GoogleSignInAccount>.value(googleUser));
 
         when(googleUser.authentication).thenAnswer((_) =>
             Future<MockGoogleSignInAuthentication>.value(googleSignInAuth));
 
-        when(firebaseAuth.signInWithCredential(authCred))
-            .thenAnswer((_) => Future<MockAuthResult>.value(new MockAuthResult()));
-
+        when(firebaseAuth.signInWithCredential(authCred)).thenAnswer(
+            (_) => Future<MockAuthResult>.value(new MockAuthResult()));
 
         when(firebaseAuth.currentUser())
             .thenAnswer((_) => Future<MockFirebaseUser>.value(currentUser));
@@ -138,8 +136,7 @@ void main() {
 
     group("signOut", () {
       test("should call both signOut()", () async {
-        when(firebaseAuth.signOut())
-            .thenAnswer((_) => Future<void>.value());
+        when(firebaseAuth.signOut()).thenAnswer((_) => Future<void>.value());
 
         when(googleSignIn.signOut())
             .thenAnswer((_) => Future<GoogleSignInAccount>.value());

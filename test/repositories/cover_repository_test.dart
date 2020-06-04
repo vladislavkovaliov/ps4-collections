@@ -17,7 +17,7 @@ void main() {
       test("should return array of games", () async {
         var coverRepository = CoverRepository(coverApi: coverApi);
 
-        coverRepository.fetchCovers();
+        await coverRepository.fetchCovers();
 
         verify(coverApi.fetchCovers()).called(1);
       });

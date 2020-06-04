@@ -17,7 +17,7 @@ void main() {
       test("should return array of games", () async {
         var gameRepository = GameRepository(gameApi: gameApi);
 
-        gameRepository.fetchGames();
+        await gameRepository.fetchGames();
 
         verify(gameApi.fetchGames()).called(1);
       });
@@ -27,7 +27,7 @@ void main() {
       test("should return array of games by name", () async {
         var gameRepository = GameRepository(gameApi: gameApi);
 
-        gameRepository.searchGameByName("God of War");
+        await gameRepository.searchGameByName("God of War");
 
         verify(gameApi.searchGameByName("God of War")).called(1);
       });
