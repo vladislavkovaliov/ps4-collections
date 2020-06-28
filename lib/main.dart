@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ps4_collection/delegates/simple_bloc_delegate.dart';
+import 'package:ps4_collection/models/game.dart';
+import 'package:ps4_collection/repositories/game_repository.dart';
 import 'package:ps4_collection/repositories/user_repository.dart';
-import 'package:ps4_collection/routes/home.dart';
-import 'package:ps4_collection/routes/sign_in.dart';
-import 'package:ps4_collection/routes/sign_up.dart';
-import 'package:ps4_collection/routes/splash.dart';
+import 'package:ps4_collection/routes/routes.dart';
 
 import 'blocs/authentication/bloc.dart';
 
@@ -14,22 +13,29 @@ void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
   final UserRepository userRepository = UserRepository();
+  final GameRepository gameRepository = GameRepository();
 
   runApp(
     BlocProvider(
       create: (context) =>
           AuthenticationBloc(userRepository: userRepository)..add(AppStarted()),
-      child: App(userRepository: userRepository),
+      child:
+          App(userRepository: userRepository, gameRepository: gameRepository),
     ),
   );
 }
 
 class App extends StatelessWidget {
   final UserRepository _userRepository;
+  final GameRepository _gameRepository;
 
-  App({Key key, @required UserRepository userRepository})
+  App(
+      {Key key,
+      @required UserRepository userRepository,
+      @required GameRepository gameRepository})
       : assert(userRepository != null),
         _userRepository = userRepository,
+        _gameRepository = gameRepository,
         super(key: key);
 
   @override
@@ -56,10 +62,14 @@ class App extends StatelessWidget {
           return Container();
         },
       ),
+      initialRoute: '/gameDescription',
       routes: {
         '/signIn': (context) => SignIn(),
         '/signUp': (context) => SignUp(),
         '/home': (context) => Home(),
+        '/gameDescription': (context) => GameDescription(
+              gameRepository: _gameRepository,
+            ),
       },
     );
   }

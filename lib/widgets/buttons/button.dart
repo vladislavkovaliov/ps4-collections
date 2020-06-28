@@ -19,7 +19,10 @@ class Button extends StatelessWidget {
         color: Color(0xFF659069),
         textColor: Color(0xFFFEFEFE),
         shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(50),
+          borderRadius: new BorderRadius.only(
+              topLeft: Radius.circular(50),
+              bottomLeft: Radius.circular(50),
+        )
         ),
         onPressed: this.onPressed,
         child: Center(

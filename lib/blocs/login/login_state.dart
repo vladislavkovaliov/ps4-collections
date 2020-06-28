@@ -96,6 +96,7 @@ class LoginState {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      isFormValid: $isFormValid,
     }''';
   }
 }

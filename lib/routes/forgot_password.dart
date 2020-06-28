@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ps4_collection/widgets/buttons/button.dart';
 
-class SignUp extends StatelessWidget {
+class ForgotPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

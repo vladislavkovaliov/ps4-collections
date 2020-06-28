@@ -30,7 +30,7 @@ void main() {
     group("fetchGames()", () {
       test("should return array of games", () async {
         final mockGameString = '''
-          [{"id": 123, "name": "abc", "genres": []}]
+          [{"id": 123, "name": "abc", "genres": [], "summary": "", "screenshots": []}]
         ''';
         final json = jsonDecode(mockGameString);
         final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();
@@ -49,7 +49,7 @@ void main() {
     group("searchGameByName()", () {
       test("should return array of games", () async {
         final mockGameString = '''
-          [{"id": 123, "name": "abc", "genres": []}]
+          [{"id": 123, "name": "abc", "genres": [], "summary": "", "screenshots": []}]
         ''';
         final json = jsonDecode(mockGameString);
         final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();
@@ -67,7 +67,7 @@ void main() {
 
       test("should return array of games without genres", () async {
         final mockGameString = '''
-          [{"id": 123, "name": "abc"}]
+          [{"id": 123, "name": "abc", "genres": [], "summary": "", "screenshots": []}]
         ''';
         final json = jsonDecode(mockGameString);
         final mockGame = (json as List).map((x) => Game.fromJson(x)).toList();

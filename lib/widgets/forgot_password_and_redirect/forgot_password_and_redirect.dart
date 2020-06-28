@@ -12,25 +12,19 @@ class ForgotPasswordAndRedirect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           "Forgot password?",
-          style: TextStyle(color: Color(0xFFFEFEFE)),
+          style: TextStyle(color: Color(0xFF576875)),
         ),
-        Container(
-          width: 2,
-          height: 16,
-          margin: EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-        ),
+        SizedBox(height: 20,),
         GestureDetector(
           onTap: this.onRedirectTap,
           child: Text(
             this.text,
-            style: TextStyle(color: Color(0xFFFEFEFE)),
+            style: TextStyle(color: Color(0xFF576875)),
           ),
         ),
       ],

@@ -5,6 +5,8 @@ import 'package:ps4_collection/blocs/register/bloc.dart';
 import 'package:ps4_collection/repositories/user_repository.dart';
 import 'package:ps4_collection/routes/sign_in.dart';
 import 'package:ps4_collection/widgets/buttons/button.dart';
+import 'package:ps4_collection/widgets/inputs/input.dart';
+
 import 'package:ps4_collection/widgets/forgot_password_and_redirect/forgot_password_and_redirect.dart';
 
 class SignUp extends StatelessWidget {
@@ -16,7 +18,6 @@ class SignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(this._userRepository);
     return Scaffold(
       body: SafeArea(
         child: BlocProvider<RegisterBloc>(
@@ -62,6 +63,26 @@ class _SignUpFormState extends State<SignUpForm> {
     _passwordController.addListener(_onPasswordChanged);
   }
 
+  getInputShadow() {
+    return new BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(.2),
+          blurRadius: 25.0, // soften the shadow
+          spreadRadius: 0.0, //extend the shadow
+          offset: Offset(
+            0.0, // Move to right 10  horizontally
+            4.0, // Move to bottom 10 Vertically
+          ),
+        )
+      ],
+    );
+  }
+
+  getPadding() {
+    return EdgeInsets.symmetric(horizontal: 40);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, RegisterState>(
@@ -75,70 +96,66 @@ class _SignUpFormState extends State<SignUpForm> {
         builder: (context, state) {
           return SafeArea(
             child: Form(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextFormField(
-                      controller: _emailController,
-                      cursorColor: Color(0xFFFEFEFE),
-                      keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(color: Color(0xFFFEFEFE)),
-                      autovalidate: true,
-                      autocorrect: false,
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(12),
-                          labelStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          hintText: "Email address",
-                          fillColor: Color(0xFF353A47),
-                          hintStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius:
-                            const BorderRadius.all(Radius.circular(30)),
-                          )),
-                      validator: (_) {
-                        return !state.isEmailValid ? 'Invalid Email' : null;
-                      },
-                    ),
-                    SizedBox(height: 16,),
-                    TextFormField(
-                      controller: _passwordController,
-                      cursorColor: Color(0xFFFEFEFE),
-                      keyboardType: TextInputType.text,
-                      obscureText: true,
-                      autovalidate: true,
-                      autocorrect: false,
-                      style: TextStyle(color: Color(0xFFFEFEFE)),
-                      decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(12),
-                          labelStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          hintText: "Password",
-                          fillColor: Color(0xFF353A47),
-                          hintStyle: TextStyle(color: Color(0xFFFEFEFE)),
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: const BorderRadius.all(Radius.circular(30)),
-                          )
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      padding: this.getPadding(),
+                      child: Text(
+                        "Sign In",
+                        style: TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 34,
+                            fontWeight: FontWeight.bold),
                       ),
-                      validator: (_) {
-                        return !state.isPasswordValid ? 'Invalid Password' : null;
-                      },
                     ),
-                    SizedBox(height: 16,),
-                    Button(
+                  ),
+                  SizedBox(
+                    height: 27,
+                  ),
+                  Container(
+                    padding: this.getPadding(),
+                    decoration: this.getInputShadow(),
+                    child: Input(
+                      emailController: _emailController,
+                      validatorText: "Invalid Email",
+                      hintText: "Email address",
+                      keyboardType: TextInputType.emailAddress,
+                      isValid: state.isEmailValid,
+                    ),
+                  ),
+                  SizedBox(   height: 27,),
+                  Container(
+                    padding: this.getPadding(),
+                    decoration: this.getInputShadow(),
+                    child: Input(
+                      emailController: _passwordController,
+                      validatorText: "Invalid Password",
+                      hintText: "Password",
+                      keyboardType: TextInputType.text,
+                      isValid: state.isPasswordValid,
+                      isObscureText: true,
+                    ),
+                  ),
+                  SizedBox(height: 40,),
+                  Container(
+                    width: 200,
+                    child: Button(
                       text: "Sign Up",
                       onPressed: this.isRegisterButtonEnabled(state)
                           ? this._onFormSubmitted
                           : null,
                     ),
-                    SizedBox(
-                      height: 32,
-                    ),
-                    ForgotPasswordAndRedirect(
+                  ),
+                  SizedBox(
+                    height: 70,
+                  ),
+                  Container(
+                    padding: this.getPadding(),
+                    child: ForgotPasswordAndRedirect(
                         text: "Sign In",
                         onRedirectTap: () {
                           Navigator.of(context).pop(
@@ -147,8 +164,8 @@ class _SignUpFormState extends State<SignUpForm> {
                               })
                           );
                         }),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
